@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import Square from './components/Square.js'
 import './App.css'
+import { FaTree } from 'react-icons/fa';
+import { FaGem } from 'react-icons/fa';
+import { FaBomb } from 'react-icons/fa';
 
 class App extends Component{
   constructor(props){
@@ -19,6 +22,29 @@ class App extends Component{
     }
   }
   
+  //create a new method to reload to intial state
+  reload = () => {
+    const { squares, winningSquareIndex, losingSquareIndex, counter } = this.state
+    //create a new variable equaling the same state 
+    let newSquares2 = ["?1", "?2", "?3", "?4", "?5", "?6", "?7", "?8", "?9"]
+    //reset the state with setState
+    this.setState({squares: newSquares2})
+
+    let winningSquareIndex2 = Math.floor(Math.random() * 9)
+    this.setState({winningSquareIndex: winningSquareIndex2})
+
+    let losingSquareIndex2 = Math.floor(Math.random() * 9)
+    this.setState({losingSquareIndex: losingSquareIndex2})
+
+    let counter2 = 9
+    this.setState({counter: counter2})
+
+    this.componentDidMount()
+
+    document.getElementById("board").style.pointerEvents = "auto";
+  }
+
+  //call compononent did mount in this method
   checkBox = (index) => {
     //destructuring
     const { squares, winningSquareIndex, losingSquareIndex, counter } = this.state
@@ -36,7 +62,7 @@ class App extends Component{
       //creating a new version of state array that we can modify
       let newSquares = squares.slice()
       //modifying the new version of the state array
-      newSquares[index] = ":moneybag:"
+      newSquares[index] = <FaGem /> 
       //setting state of original array with new array
       this.setState({ squares: newSquares })
       
@@ -48,7 +74,7 @@ class App extends Component{
         //creating a new version of state array that we can modify
         let newSquares = squares.slice()
         //modifying the new version of the state array
-        newSquares[index] = "@(-_-)@"
+        newSquares[index] = <FaBomb /> 
         //setting state of original array with new array
         this.setState({ squares: newSquares })
       
@@ -58,7 +84,7 @@ class App extends Component{
           //creating a new version of state array that we can modify
           let newSquares = squares.slice();
           //modifying the new version of the state array
-          newSquares[index] = "tree";
+          newSquares[index] = <FaTree /> ;
           //setting state of original array with new array
           this.setState({ squares: newSquares })
       }
@@ -71,18 +97,20 @@ class App extends Component{
     alert(index)
   }
 
-  refreshPage = () => {
-    window.location.reload(false);
-  }
   
   
   render(){
+    
+    // const refreshPage = () => {
+    //   window.location.reload(true);
+    // }
 
     let square = this.state.squares.map((value, index) => {
       return (
         <Square 
           value = {value}
           index = {index}
+          key = { index }
           alertIndex = {this.alertIndex}
           checkBox = {this.checkBox}
         />
@@ -95,7 +123,7 @@ class App extends Component{
           {square}
         </div>
         <div>
-          <button class="button" onClick= {this.refreshPage}>Restart Game</button>
+          <button className="button" onClick= {this.reload}>Restart Game</button>
         </div>
         <div id = "counter">
           {this.state.counter}
