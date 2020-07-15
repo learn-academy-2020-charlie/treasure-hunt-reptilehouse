@@ -8,7 +8,8 @@ class App extends Component{
     this.state = {
       squares: ["?1", "?2", "?3", "?4", "?5", "?6", "?7", "?8", "?9"],
       winningSquareIndex: Math.floor(Math.random() * 9),
-      losingSquareIndex: Math.floor(Math.random() * 9)
+      losingSquareIndex: Math.floor(Math.random() * 9),
+      counter: 9
     }
   }
   componentDidMount() {
@@ -20,11 +21,16 @@ class App extends Component{
   
   checkBox = (index) => {
     //destructuring
-    const { squares, winningSquareIndex, losingSquareIndex } = this.state
+    const { squares, winningSquareIndex, losingSquareIndex, counter } = this.state
+    //Handle the counter count
+    //make a new variable to store the new count
+    let newCounter = counter - 1;
+    this.setState({counter: newCounter});
+    //Then use setState to update the count.
     //If the cilicked box's index is the same as the winning index
     if (winningSquareIndex === index) {
       //make so game ends and user cannot click anymore
-      document.getElementById("box").style.pointerEvents = "none";
+      document.getElementById("board").style.pointerEvents = "none";
       //alter the user that the user has won
       this.alertIndex("You win!!");
       //creating a new version of state array that we can modify
@@ -37,7 +43,7 @@ class App extends Component{
     //Else if the cilicked box's index is the same as the losing index
     } else if (losingSquareIndex === index) {
         //make so game ends and user cannot click anymore
-        document.getElementById("box").style.pointerEvents = "none";
+        document.getElementById("board").style.pointerEvents = "none";
         this.alertIndex("You Lose :(");
         //creating a new version of state array that we can modify
         let newSquares = squares.slice()
@@ -64,8 +70,14 @@ class App extends Component{
   alertIndex = (index) => {
     alert(index)
   }
+
+  refreshPage = () => {
+    window.location.reload(false);
+  }
+  
   
   render(){
+
     let square = this.state.squares.map((value, index) => {
       return (
         <Square 
@@ -82,8 +94,12 @@ class App extends Component{
         <div id = "board">
           {square}
         </div>
-        <button class="button" onClick= {location.reload()}>Restart Game</button>
-
+        <div>
+          <button class="button" onClick= {this.refreshPage}>Restart Game</button>
+        </div>
+        <div id = "counter">
+          {this.state.counter}
+        </div>
       </React.Fragment>
     )
   }
