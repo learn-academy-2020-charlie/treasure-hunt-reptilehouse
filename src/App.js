@@ -7,19 +7,55 @@ class App extends Component{
     super(props)
     this.state = {
       squares: ["?1", "?2", "?3", "?4", "?5", "?6", "?7", "?8", "?9"],
+      winningSquareIndex: Math.floor(Math.random() * 9),
+      losingSquareIndex: Math.floor(Math.random() * 9)
     }
   }
-
-  changeToTree = (index) => {
+  componentDidMount() {
+    const { squares, winningSquareIndex, losingSquareIndex } = this.state
+    while (winningSquareIndex === losingSquareIndex) {
+      let newWinningSquareIndex = Math.floor(Math.random() * 9);
+    }
+  }
+  
+  checkBox = (index) => {
     //destructuring
-    const { squares } = this.state
-    //creating a new version of state array that we can modify
-    let newSquares = squares.slice()
-    //modifying the new version of the state array
-    newSquares[index] =  "tree"
-    //["tree", "?2", "?3", "?4", "?5", "?6", "?7", "?8", "?9"]
-    //setting state of original array with new array
-    this.setState({ squares: newSquares })
+    const { squares, winningSquareIndex, losingSquareIndex } = this.state
+    //If the cilicked box's index is the same as the winning index
+    if (winningSquareIndex === index) {
+      //make so game ends and user cannot click anymore
+      document.getElementById("box").style.pointerEvents = "none";
+      //alter the user that the user has won
+      this.alertIndex("You win!!");
+      //creating a new version of state array that we can modify
+      let newSquares = squares.slice()
+      //modifying the new version of the state array
+      newSquares[index] = ":moneybag:"
+      //setting state of original array with new array
+      this.setState({ squares: newSquares })
+      
+    //Else if the cilicked box's index is the same as the losing index
+    } else if (losingSquareIndex === index) {
+        //make so game ends and user cannot click anymore
+        document.getElementById("box").style.pointerEvents = "none";
+        this.alertIndex("You Lose :(");
+        //creating a new version of state array that we can modify
+        let newSquares = squares.slice()
+        //modifying the new version of the state array
+        newSquares[index] = "@(-_-)@"
+        //setting state of original array with new array
+        this.setState({ squares: newSquares })
+      
+        //Else if the cilicked box's index is the same as the tree index
+      } else {
+          this.alertIndex("Keep Looking");
+          //creating a new version of state array that we can modify
+          let newSquares = squares.slice();
+          //modifying the new version of the state array
+          newSquares[index] = "tree";
+          //setting state of original array with new array
+          this.setState({ squares: newSquares })
+      }
   }
 
   //you can update the state object but you can never edit the state object
@@ -36,7 +72,7 @@ class App extends Component{
           value = {value}
           index = {index}
           alertIndex = {this.alertIndex}
-          changeToTree = {this.changeToTree}
+          checkBox = {this.checkBox}
         />
       )
     })
@@ -46,6 +82,7 @@ class App extends Component{
         <div id = "board">
           {square}
         </div>
+        <button class="button" onClick= {location.reload()}>Restart Game</button>
 
       </React.Fragment>
     )
